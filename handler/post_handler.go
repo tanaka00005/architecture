@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func main() {
+func Handler() {
 	http.HandleFunc("/ooo", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "ooo, %q", html.EscapeString(r.URL.Path))
 	})
