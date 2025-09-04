@@ -5,7 +5,7 @@ import (
 	"html"
 	"log"
 	"net/http"
-	"github.com/tanaka00005/architecture/handler"
+	"architecture/handler"
 )
 
 func main() {
@@ -13,7 +13,7 @@ func main() {
 		fmt.Fprintf(w, "hello, %q", html.EscapeString(r.URL.Path))
 	})
 
-	handler.Login()
+	handler.Handler()
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
