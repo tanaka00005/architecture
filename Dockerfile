@@ -8,4 +8,4 @@ COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
 
-CMD ["go", "run", "main.go"]
+CMD ["go", "run", "cmd/api/main.go"]
