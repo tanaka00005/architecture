@@ -1,4 +1,5 @@
 package repository
+//データアクセス層
 
 import (
 	"architecture/internal/model"
@@ -22,11 +23,15 @@ type DiaryRepository interface {
 	FindUserAll(userId uint) ([]model.Post, error)
 }
 
+func NewDiaryRepository(db *sql.DB) DiaryRepository {
+	return &diaryRepository{db: db}
+}
+
 func getPosts(db *sql.DB) ([]model.Post, error) {
 
 	var posts []model.Post
 
-	rows, err := db.Query("SELECT * FROM posts")
+	rows, err := db.Query("SELECT id, title, content, user_id, created_at, updated_at FROM posts")
 
 	if err != nil {
 		log.Printf("failed to get posts: %v", err)

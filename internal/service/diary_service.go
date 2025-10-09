@@ -1,4 +1,5 @@
 package service
+//アプリケーション層
 
 import (
 	"architecture/internal/model"
@@ -13,7 +14,7 @@ type UserWithPosts struct {
 	Posts []model.Post `json:"posts"`
 }
 
-type DiaryRepository interface {
+type DiaryService interface {
 	GetUserWithPosts(userID uint) (*UserWithPosts, error)
 }
 
@@ -21,7 +22,7 @@ type diaryService struct {
 	db repository.DiaryRepository
 }
 
-func NewDiaryRepository(db repository.DiaryRepository) DiaryRepository {
+func NewDiaryService(db repository.DiaryRepository) DiaryService {
 	return &diaryService{db: db}
 }
 

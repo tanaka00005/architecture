@@ -1,6 +1,9 @@
 package main
 
 import (
+	"architecture/internal/handler"
+	"architecture/internal/repository"
+	"architecture/internal/service"
 	"database/sql"
 	"fmt"
 	"log"
@@ -38,6 +41,19 @@ func Handler() {
 			return
 		}
 		log.Println("connected to postgres")
+
+		diaryRepo := repository.NewDiaryRepository(db)
+		diarySvc := service.NewDiaryService(diaryRepo)
+		diaryHandler := handler.NewDiaryHandler(diarySvc)
+
+		mux := http.NewServeMux()
+		mux.HandleFunc("GET /users/{id}/posts",diaryHandler.GetUserWithPosts)
+
+		fmt.Println("Server startiong on port 8080")
+
+		if err := http.ListenAndServe(":8080",mux);err != nil{
+			log.Fatalf("Faild to start server:%v",err)
+		}
 
 	})
 }
