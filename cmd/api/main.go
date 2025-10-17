@@ -9,10 +9,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	_ "github.com/lib/pq"
 )
 
-func Handler() {
-	http.HandleFunc("/ooo", func(w http.ResponseWriter, r *http.Request) {
+func main() {
 		// fmt.Fprintf(w, "ooo, %q", html.EscapeString(r.URL.Path))
 
 		dbHost := os.Getenv("DB_HOST")
@@ -29,7 +29,6 @@ func Handler() {
 
 		if err != nil {
 			log.Printf("failed to open to postgres: %v", err)
-			http.Error(w, "failed to open to postgres", http.StatusInternalServerError)
 			return
 		}
 
@@ -37,7 +36,6 @@ func Handler() {
 
 		if err := db.Ping(); err != nil {
 			log.Printf("failed to connect to postgres: %v", err)
-			http.Error(w, "ailed to connect to postgres", http.StatusInternalServerError)
 			return
 		}
 		log.Println("connected to postgres")
@@ -55,5 +53,5 @@ func Handler() {
 			log.Fatalf("Faild to start server:%v",err)
 		}
 
-	})
+	
 }
