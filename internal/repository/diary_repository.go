@@ -23,6 +23,7 @@ type DiaryRepository interface {
 	FindUserAll(userId uint) ([]model.Post, error)
 }
 
+//DiaryRepositoryというインターフェースの方として返す
 func NewDiaryRepository(db *sql.DB) DiaryRepository {
 	return &diaryRepository{db: db}
 }
@@ -42,7 +43,7 @@ func getPosts(db *sql.DB) ([]model.Post, error) {
 
 	for rows.Next() {
 		var post model.Post
-		if err := rows.Scan(&post.ID, &post.Title, &post.Content); err != nil {
+		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.UserID, &post.CreatedAt, &post.UpdatedAt); err != nil {
 			return nil, fmt.Errorf("err : %v", err)
 		}
 		posts = append(posts, post)
