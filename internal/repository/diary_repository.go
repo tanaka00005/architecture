@@ -23,6 +23,10 @@ type DiaryRepository interface {
 	FindUserAll(userId uint) ([]model.Post, error)
 }
 
+type DiaryPost interface {
+	PostUser(userId uint) ([]model.Post, error)
+}
+
 //DiaryRepositoryというインターフェースの方として返す
 func NewDiaryRepository(db *sql.DB) DiaryRepository {
 	return &diaryRepository{db: db}
@@ -30,6 +34,31 @@ func NewDiaryRepository(db *sql.DB) DiaryRepository {
 
 func getPosts(db *sql.DB) ([]model.Post, error) {
 
+	var posts []model.Post
+
+	rows, err := db.Query("SELECT id, title, content, user_id, created_at, updated_at FROM posts")
+
+	if err != nil {
+		log.Printf("failed to get posts: %v", err)
+		return nil, fmt.Errorf("err : %v", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var post model.Post
+		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &post.UserID, &post.CreatedAt, &post.UpdatedAt); err != nil {
+			return nil, fmt.Errorf("err : %v", err)
+		}
+		posts = append(posts, post)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("err : %v", err)
+	}
+	return posts, nil
+}
+
+func postArticle(db *sql.DB)([]model.Post,error){
 	var posts []model.Post
 
 	rows, err := db.Query("SELECT id, title, content, user_id, created_at, updated_at FROM posts")
@@ -63,3 +92,15 @@ func (r *diaryRepository) FindUserAll(userId uint) ([]model.Post, error) {
 	fmt.Printf("Posts found: %v\n", posts)
 	return posts, nil
 }
+
+
+func (r *diaryRepository) PostUser(userId uint) ([]model.Post, error){
+	posts, err := postArticle(r.db)
+	if err != nil {
+		log.Printf("failed to get posts: %v", err)
+		return nil, fmt.Errorf("err : %v", err)
+	}
+	fmt.Printf("Posts found: %v\n", posts)
+	return posts, nil
+}
+

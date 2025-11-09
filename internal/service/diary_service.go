@@ -32,17 +32,21 @@ func (s *diaryService) GetUserWithPosts(userID uint) (*UserWithPosts, error) {
 		return nil, fmt.Errorf("postsの取得に失敗しました: %w", err)
 	}
 
+	fmt.Printf("posts%v",posts)
+
 	// 本来はユーザー情報も取得する
 	// user, err := s.repo.FindUserByID(userID)
 	// ...
 
-	// 取得した情報を使ってレスポンス用の構造体を組み立てて返す
+	//取得した情報を使ってレスポンス用の構造体を組み立てて返す
 	response := &UserWithPosts{
 		ID:    userID,             // 本来はuser.ID
-		Name:  "Test User",        // 本来はuser.Name
-		Email: "test@example.com", // 本来はuser.Email
+		Name:  "a",        // 本来はuser.Name
+		Email: "aaaa", // 本来はuser.Email
 		Posts: posts,
 	}
+
+	fmt.Printf("response%v",response)
 
 	return response, nil
 }
